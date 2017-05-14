@@ -73,7 +73,7 @@
 
         plot.hooks.bindEvents.push(function (plot, eventHolder) {
 
-            // get plot options
+            // get ozonePlot options
             that.plotOptions = plot.getOptions();
 
             // for legacy (<0.8.5) implementations

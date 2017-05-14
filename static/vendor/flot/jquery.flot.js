@@ -119,7 +119,7 @@ Licensed under the MIT license.
 		this.text = {};
 
 		// Cache of text fragments and metrics, so we can avoid expensively
-		// re-calculating them when the plot is re-rendered in a loop.
+		// re-calculating them when the ozonePlot is re-rendered in a loop.
 
 		this._textCache = {};
 	}
@@ -132,7 +132,7 @@ Licensed under the MIT license.
 	Canvas.prototype.resize = function(width, height) {
 
 		if (width <= 0 || height <= 0) {
-			throw new Error("Invalid dimensions for plot, width = " + width + ", height = " + height);
+			throw new Error("Invalid dimensions for ozonePlot, width = " + width + ", height = " + height);
 		}
 
 		var element = this.element,
@@ -503,7 +503,7 @@ Licensed under the MIT license.
 	};
 
 	///////////////////////////////////////////////////////////////////////////
-	// The top-level container for the entire plot.
+	// The top-level container for the entire ozonePlot.
 
     function Plot(placeholder, data_, options_, plugins) {
         // data is on the form:
@@ -521,8 +521,8 @@ Licensed under the MIT license.
                     labelFormatter: null, // fn: string -> string
                     labelBoxBorderColor: "#ccc", // border color for the little label boxes
                     container: null, // container (as jQuery object) to put legend in, null means default on top of graph
-                    position: "ne", // position of default legend container within plot
-                    margin: 5, // distance from grid edge to default legend container within plot
+                    position: "ne", // position of default legend container within ozonePlot
+                    margin: 5, // distance from grid edge to default legend container within ozonePlot
                     backgroundColor: null, // null means auto-detect
                     backgroundOpacity: 0.85, // set to 0 to avoid background
                     sorted: null    // default to no legend sorting
@@ -614,8 +614,8 @@ Licensed under the MIT license.
                 },
                 hooks: {}
             },
-        surface = null,     // the canvas for the plot itself
-        overlay = null,     // canvas for interactive stuff on top of plot
+        surface = null,     // the canvas for the ozonePlot itself
+        overlay = null,     // canvas for interactive stuff on top of ozonePlot
         eventHolder = null, // jQuery object that events should be bound to
         ctx = null, octx = null,
         xaxes = [], yaxes = [],
@@ -1300,7 +1300,7 @@ Licensed under the MIT license.
         function setupCanvases() {
 
             // Make sure the placeholder is clear of everything except canvases
-            // from a previous plot in this container that we'll try to re-use.
+            // from a previous ozonePlot in this container that we'll try to re-use.
 
             placeholder.css("padding", 0) // padding messes up the positioning
                 .children().filter(function(){
@@ -1319,7 +1319,7 @@ Licensed under the MIT license.
             // define which element we're listening for events on
             eventHolder = $(overlay.element).unbind();
 
-            // If we're re-using a plot object, shut down the old one
+            // If we're re-using a ozonePlot object, shut down the old one
 
             var existing = placeholder.data("plot");
 
@@ -1364,7 +1364,7 @@ Licensed under the MIT license.
         }
 
         function setTransformationHelpers(axis) {
-            // set helper functions on the axis, assumes plot area
+            // set helper functions on the axis, assumes ozonePlot area
             // has been computed already
 
             function identity(x) { return x; }
@@ -1523,13 +1523,13 @@ Licensed under the MIT license.
         }
 
         function adjustLayoutForThingsStickingOut() {
-            // possibly adjust plot offset to ensure everything stays
+            // possibly adjust ozonePlot offset to ensure everything stays
             // inside the canvas and isn't clipped off
 
             var minMargin = options.grid.minBorderMargin,
                 axis, i;
 
-            // check stuff from the plot (FIXME: this should just read
+            // check stuff from the ozonePlot (FIXME: this should just read
             // a value from the series, otherwise it's impossible to
             // customize)
             if (minMargin == null) {
@@ -1569,7 +1569,7 @@ Licensed under the MIT license.
         function setupGrid() {
             var i, axes = allAxes(), showGrid = options.grid.show;
 
-            // Initialize the plot's offset from the edge of the canvas
+            // Initialize the ozonePlot's offset from the edge of the canvas
 
             for (var a in plotOffset) {
                 var margin = options.grid.margin || 0;
@@ -1629,7 +1629,7 @@ Licensed under the MIT license.
             plotWidth = surface.width - plotOffset.left - plotOffset.right;
             plotHeight = surface.height - plotOffset.bottom - plotOffset.top;
 
-            // now we got the proper plot dimensions, we can compute the scaling
+            // now we got the proper ozonePlot dimensions, we can compute the scaling
             $.each(axes, function (_, axis) {
                 setTransformationHelpers(axis);
             });
@@ -3139,7 +3139,7 @@ Licensed under the MIT license.
         }
     }
 
-    // Add the plot function to the top level of the jQuery object
+    // Add the ozonePlot function to the top level of the jQuery object
 
     $.plot = function(placeholder, data, options) {
         //var t0 = new Date();
@@ -3152,7 +3152,7 @@ Licensed under the MIT license.
 
     $.plot.plugins = [];
 
-    // Also add the plot function as a chainable property
+    // Also add the ozonePlot function as a chainable property
 
     $.fn.plot = function(data, options) {
         return this.each(function() {

@@ -57,11 +57,11 @@ More detail and specific examples can be found in the included HTML file.
 
 (function($) {
 
-	// Maximum redraw attempts when fitting labels within the plot
+	// Maximum redraw attempts when fitting labels within the ozonePlot
 
 	var REDRAW_ATTEMPTS = 10;
 
-	// Factor by which to shrink the pie when fitting labels within the plot
+	// Factor by which to shrink the pie when fitting labels within the ozonePlot
 
 	var REDRAW_SHRINK = 0.95;
 
@@ -414,7 +414,7 @@ More detail and specific examples can be found in the included HTML file.
 
 				ctx.restore();
 
-				// Draw the labels, returning true if they fit within the plot
+				// Draw the labels, returning true if they fit within the ozonePlot
 
 				if (options.series.pie.label.show) {
 					return drawLabels();

@@ -293,7 +293,7 @@ shadowSize and lineWidth are derived as well from the points series.
             else drawLower = false;
         }
 
-        //internal radius value in errorbar, allows to plot radius 0 points and still keep proper sized caps
+        //internal radius value in errorbar, allows to ozonePlot radius 0 points and still keep proper sized caps
         //this is a way to get errorbars on lines without visible connecting dots
         radius = err.radius != null? err.radius: radius;
 

@@ -1106,7 +1106,7 @@ $(function() {
     var container = $("#flot-line-chart-moving");
 
     // Determine how many data points to keep based on the placeholder's initial size;
-    // this gives us a nice high-res plot while avoiding more than one point per pixel.
+    // this gives us a nice high-res ozonePlot while avoiding more than one point per pixel.
 
     var maximum = container.outerWidth() / 2 || 300;
 

@@ -423,7 +423,7 @@ API.txt for details.
 	});
 
 	// Time-axis support used to be in Flot core, which exposed the
-	// formatDate function on the plot object.  Various plugins depend
+	// formatDate function on the ozonePlot object.  Various plugins depend
 	// on the function, so we need to re-expose it here.
 
 	$.plot.formatDate = formatDate;

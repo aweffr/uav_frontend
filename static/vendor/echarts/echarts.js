@@ -4077,7 +4077,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *        {
 	     *            seriesIndex: 3,
 	     *            geoId: ['aa', 'cc'],
-	     *            gridName: ['xx', 'rr']
+	     *            gridName: ['ozoneXx', 'rr']
 	     *        }
 	     *        xxxIndex can be set as 'all' (means all xxx) or 'none' (means not specify)
 	     *        If nothing or null/undefined specified, return nothing.
@@ -4330,7 +4330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        tpl = tpl.replace('MM', s2d(M))
 	            .toLowerCase()
 	            .replace('yyyy', y)
-	            .replace('yy', y % 100)
+	            .replace('ozoneYy', y % 100)
 	            .replace('dd', s2d(d))
 	            .replace('d', d)
 	            .replace('hh', s2d(h))
@@ -6040,7 +6040,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * key: componentType,
 	         * value:
 	         *     componentClass, when componentType is 'xxx'
-	         *     or Object.<subKey, componentClass>, when componentType is 'xxx.yy'
+	         *     or Object.<subKey, componentClass>, when componentType is 'xxx.ozoneYy'
 	         * @type {Object}
 	         */
 	        var storage = {};
@@ -6109,7 +6109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 
 	        /**
-	         * @return {Array.<string>} Like ['aa', 'bb'], but can not be ['aa.xx']
+	         * @return {Array.<string>} Like ['aa', 'bb'], but can not be ['aa.ozoneXx']
 	         */
 	        entity.getAllClassMainTypes = function () {
 	            var types = [];
@@ -6627,7 +6627,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * @public
 	         * @param {Array.<string>} targetNameList Target Component type list.
-	         *                                           Can be ['aa', 'bb', 'aa.xx']
+	         *                                           Can be ['aa', 'bb', 'aa.ozoneXx']
 	         * @param {Array.<string>} fullNameList By which we can build dependency graph.
 	         * @param {Function} callback Params: componentType, dependencies.
 	         * @param {Object} context Scope of callback.
@@ -45722,8 +45722,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Update covers.
 	         * @param {Array.<Object>} brushOptionList Like:
 	         *        [
-	         *            {id: 'xx', brushType: 'line', range: [23, 44], brushStyle, transformable},
-	         *            {id: 'yy', brushType: 'rect', range: [[23, 44], [23, 54]]},
+	         *            {id: 'ozoneXx', brushType: 'line', range: [23, 44], brushStyle, transformable},
+	         *            {id: 'ozoneYy', brushType: 'rect', range: [[23, 44], [23, 54]]},
 	         *            ...
 	         *        ]
 	         *        `brushType` is required in each cover info. (can not be 'auto')
@@ -55297,14 +55297,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Convert
 	         * [{
 	         *  type: 'group',
-	         *  id: 'xx',
+	         *  id: 'ozoneXx',
 	         *  children: [{type: 'circle'}, {type: 'polygon'}]
 	         * }]
 	         * to
 	         * [
-	         *  {type: 'group', id: 'xx'},
-	         *  {type: 'circle', parentId: 'xx'},
-	         *  {type: 'polygon', parentId: 'xx'}
+	         *  {type: 'group', id: 'ozoneXx'},
+	         *  {type: 'circle', parentId: 'ozoneXx'},
+	         *  {type: 'polygon', parentId: 'ozoneXx'}
 	         * ]
 	         *
 	         * @private

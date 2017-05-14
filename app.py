@@ -1,18 +1,16 @@
 from flask import Flask, render_template
 from random import shuffle, randint
 from json import dumps
-from recevie_data import revice_data_service
-import threading
+from random import random
 import time
-import psutil
-from subprocess import PIPE
+import datetime
 
 app = Flask(__name__)
 
-xx = [time.strftime("%HH-%MM-%SS") for x in range(100)]
-yy = [75, ]
+xx = [time.strftime("%H:%M:%S") for x in range(100)]
+yy = [52, ]
 for i in range(99):
-    yy.append(yy[-1] + randint(-3, 3))
+    yy.append(yy[-1] + 0.5 * randint(-3, 3))
 
 
 @app.route('/')
@@ -38,7 +36,7 @@ def pages(page_name):
 @app.route('/getdata')
 def getdata():
     global xx, yy
-    d = {'xx': [x for x in xx],
+    d = {'xx': xx,
          'yy': yy}
     return dumps(d)
 
@@ -46,13 +44,37 @@ def getdata():
 @app.route('/updatedata')
 def update_data():
     global xx, yy
-    xx.append(time.strftime("%HH-%MM-%SS"))
-    yy.append(yy[-1] + randint(-4, 4))
+    xx.append(time.strftime("%H:%M:%S"))
+    yy.append(yy[-1] + 0.66 * randint(-4, 5))
     d = {'x': xx[-1], 'y': yy[-1]}
+    return dumps(d)
+
+
+@app.route('/get-ozone-history-data')
+def get_ozone_history_data():
+    # Test stage
+    ozone_xx = [time.strftime(datetime.datetime(2017, 5, i).strftime("%Y-%m-%d")) for i in range(6, 14)]
+    ozone_yy = [52 + 8 * (random() - 0.5) for i in range(len(ozone_xx))]
+    d = {
+        "xx": ozone_xx,
+        "yy": ozone_yy
+    }
+    print(d)
+    return dumps(d)
+
+
+@app.route('/get-pm25-history-data')
+def get_pm25_history_data():
+    # Test stage
+    pm25_xx = [time.strftime(datetime.datetime(2017, 5, i).strftime("%Y-%m-%d")) for i in range(6, 14)]
+    pm25_yy = [78 + 40 * (random() - 0.5) for i in range(len(pm25_xx))]
+    d = {
+        "xx": pm25_xx,
+        "yy": pm25_yy
+    }
     return dumps(d)
 
 
 if __name__ == '__main__':
     # proc = psutil.Popen(["python", "D:/NetworkProgramming/dynamic_chart/core/recevie_data.py"], stdin=PIPE, stdout=PIPE)
     app.run(host="0.0.0.0", port=12000)
-

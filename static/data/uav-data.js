@@ -10,14 +10,13 @@ function plot(data) {
     xx = data['xx'];
     yy = data['yy'];
 
-    // $("#debug").text(" " + xx + " " + yy);
+    // $("#debug").text(" " + ozoneXx + " " + ozoneYy);
 
     option = {
         title: {
             text: '臭氧——时间',
             left: 'left'
         },
-        tooltip: {},
         legend: {
             data: ['臭氧']
         },
