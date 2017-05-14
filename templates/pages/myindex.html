@@ -1,0 +1,135 @@
+{% extends "/pages/base.html" %}
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">无人机数据展示平台</h1>
+                <p id="debug"></p>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        臭氧近日浓度变化
+                    </div>
+                    <div class="panel-body">
+                        <div style="width:100%; height:360px" id="ozone-history-chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        PM2.5近日浓度变化
+                    </div>
+                    <div class="panel-body">
+                        <div style="width:100%; height:360px" id="pm25-history-chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        臭氧云图
+                    </div>
+                    <div class="panel-body">
+                        <div style="width:100%; height:360px" id="ozone-cloud-chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        PM2.5云图
+                    </div>
+                    <div class="panel-body">
+                        <div style="width:100%; height:360px" id="pm25-day-chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <!-- Echarts JavaScripts -->
+    <script src="/static/vendor/echarts/echarts.js"></script>
+    <script src="/static/vendor/echarts/bmap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            data_json = [[
+
+                {
+                    "coord": [121.450506, 31.032349],
+                    "elevation": 0
+                },
+                {
+                    "coord": [121.451506, 31.032349],
+                    "elevation": 10
+                },
+                {
+                    "coord": [121.452506, 31.032349],
+                    "elevation": 35
+                },
+                {
+                    "coord": [121.453506, 31.032349],
+                    "elevation": 60
+                },
+                {
+                    "coord": [121.454506, 31.032349],
+                    "elevation": 75
+                },
+                {
+                    "coord": [121.455506, 31.032349],
+                    "elevation": 88
+                },
+                {
+                    "coord": [121.456506, 31.032349],
+                    "elevation": 100
+                }
+            ]];
+
+            var points = [].concat.apply([], data_json.map(function (track) {
+                return track.map(function (seg) {
+                    return seg.coord.concat([seg.elevation]);
+                });
+            }));
+
+            var myChart = echarts.init(document.getElementById('ozone-cloud-chart'));
+            myChart.setOption({
+                animation: false,
+                bmap: {
+                    center: [121.450506, 31.032349],
+                    zoom: 18,
+                    roam: true
+                },
+                visualMap: {
+                    type: 'continuous',
+                    show: true,
+                    top: 'top',
+                    min: 0,
+                    max: 100,
+                    seriesIndex: 0,
+                    calculable: true,
+                    inRange: {
+                        color: ['blue', 'blue', 'green', 'yellow', 'red']
+                    }
+                },
+                series: [{
+                    type: 'heatmap',
+                    coordinateSystem: 'bmap',
+                    data: points,
+                    pointSize: 15,
+                    blurSize: 18
+                }]
+            });
+            var bmap = myChart.getModel().getComponent('bmap').getBMap();
+            bmap.addControl(new BMap.MapTypeControl());
+        });
+    </script>
+{% endblock %}
