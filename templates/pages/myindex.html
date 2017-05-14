@@ -62,74 +62,45 @@
     <script src="/static/vendor/echarts/bmap.min.js"></script>
     <script>
         $(document).ready(function () {
-            data_json = [[
+            $.getJSON("/static/data/test_data.json", function (data_json) {
 
-                {
-                    "coord": [121.450506, 31.032349],
-                    "elevation": 0
-                },
-                {
-                    "coord": [121.451506, 31.032349],
-                    "elevation": 10
-                },
-                {
-                    "coord": [121.452506, 31.032349],
-                    "elevation": 35
-                },
-                {
-                    "coord": [121.453506, 31.032349],
-                    "elevation": 60
-                },
-                {
-                    "coord": [121.454506, 31.032349],
-                    "elevation": 75
-                },
-                {
-                    "coord": [121.455506, 31.032349],
-                    "elevation": 88
-                },
-                {
-                    "coord": [121.456506, 31.032349],
-                    "elevation": 100
-                }
-            ]];
+                var points = [].concat.apply([], data_json.map(function (track) {
+                    return track.map(function (seg) {
+                        return seg.coord.concat([seg.elevation]);
+                    });
+                }));
 
-            var points = [].concat.apply([], data_json.map(function (track) {
-                return track.map(function (seg) {
-                    return seg.coord.concat([seg.elevation]);
+                var myChart = echarts.init(document.getElementById('ozone-cloud-chart'));
+                myChart.setOption({
+                    animation: false,
+                    bmap: {
+                        center: [121.450506, 31.032349],
+                        zoom: 18,
+                        roam: true
+                    },
+                    visualMap: {
+                        type: 'continuous',
+                        show: true,
+                        top: 'top',
+                        min: 0,
+                        max: 100,
+                        seriesIndex: 0,
+                        calculable: true,
+                        inRange: {
+                            color: ['blue', 'blue', 'green', 'yellow', 'red']
+                        }
+                    },
+                    series: [{
+                        type: 'heatmap',
+                        coordinateSystem: 'bmap',
+                        data: points,
+                        pointSize: 10,
+                        blurSize: 12
+                    }]
                 });
-            }));
-
-            var myChart = echarts.init(document.getElementById('ozone-cloud-chart'));
-            myChart.setOption({
-                animation: false,
-                bmap: {
-                    center: [121.450506, 31.032349],
-                    zoom: 18,
-                    roam: true
-                },
-                visualMap: {
-                    type: 'continuous',
-                    show: true,
-                    top: 'top',
-                    min: 0,
-                    max: 100,
-                    seriesIndex: 0,
-                    calculable: true,
-                    inRange: {
-                        color: ['blue', 'blue', 'green', 'yellow', 'red']
-                    }
-                },
-                series: [{
-                    type: 'heatmap',
-                    coordinateSystem: 'bmap',
-                    data: points,
-                    pointSize: 15,
-                    blurSize: 18
-                }]
-            });
-            var bmap = myChart.getModel().getComponent('bmap').getBMap();
-            bmap.addControl(new BMap.MapTypeControl());
+                var bmap = myChart.getModel().getComponent('bmap').getBMap();
+                bmap.addControl(new BMap.MapTypeControl());
+            })
         });
     </script>
 {% endblock %}

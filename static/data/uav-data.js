@@ -74,6 +74,6 @@ $(document).ready(function () {
             dataType: "json",
             success: update_data
         })
-    }, 333);
+    }, 1000);
     setInterval(update_chart, 1000);
 });
