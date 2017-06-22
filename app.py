@@ -7,7 +7,7 @@ import datetime
 
 app = Flask(__name__)
 
-xx = [datetime.datetime(year=2017, month=5, day=14, hour=17, minute=5, second=x).strftime("%H:%M:%S") for x in range(60)]
+xx = [(datetime.datetime.now() + datetime.timedelta(seconds=(x-60))).strftime("%H:%M:%S") for x in range(60)]
 yy = [52, ]
 for i in range(59):
     yy.append(yy[-1] + 0.5 * randint(-3, 3))
@@ -41,13 +41,13 @@ def getdata():
     return dumps(d)
 
 
-# @app.route('/updatedata')
-# def update_data():
-#     global xx, yy
-#     xx.append(time.strftime("%H:%M:%S"))
-#     yy.append(yy[-1] + 0.66 * randint(-4, 5))
-#     d = {'x': xx[-1], 'y': yy[-1]}
-#     return dumps(d)
+@app.route('/updatedata')
+def update_data():
+    global xx, yy
+    xx.append(time.strftime("%H:%M:%S"))
+    yy.append(yy[-1] + 0.66 * randint(-2, 2))
+    d = {'x': xx[-1], 'y': yy[-1]}
+    return dumps(d)
 
 
 @app.route('/get-ozone-history-data')

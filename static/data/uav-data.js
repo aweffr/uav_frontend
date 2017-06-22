@@ -31,7 +31,7 @@ function plot(data) {
             name: '臭氧',
             type: 'line',
             data: yy,
-            smooth: true
+            smooth: false
         }]
     };
 
