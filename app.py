@@ -8,9 +8,9 @@ import datetime
 app = Flask(__name__)
 
 xx = [(datetime.datetime.now() + datetime.timedelta(seconds=(x-60))).strftime("%H:%M:%S") for x in range(60)]
-yy = [52, ]
+yy = [0, ]
 for i in range(59):
-    yy.append(yy[-1] + 0.5 * randint(-3, 3))
+    yy.append(yy[-1] + 0.5 * randint(0, 0))
 
 
 @app.route('/')
@@ -45,7 +45,7 @@ def getdata():
 def update_data():
     global xx, yy
     xx.append(time.strftime("%H:%M:%S"))
-    yy.append(yy[-1] + 0.66 * randint(-2, 2))
+    yy.append(yy[-1] + 0.66 * randint(0, 0))
     d = {'x': xx[-1], 'y': yy[-1]}
     return dumps(d)
 
