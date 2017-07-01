@@ -74,7 +74,7 @@ def revice_data_service(host, port, db_session=None, client=None):
             print("#DEBUG: szBuf=", szBuf)
 
             s = szBuf.decode("utf-8")
-            s = list(map(float, s.split()))
+            s = list(map(float, s.split(",")))
 
             print("Service succeed at %s" % time_string)
             print("unpacked:", s)
@@ -102,6 +102,7 @@ def revice_data_service(host, port, db_session=None, client=None):
         except Exception as e:
             time_string = datetime.now().strftime("%H-%M-%S")
             print("Service error at %s" % time_string)
+            print("detail:", e)
 
 
 if "__main__" == __name__:
