@@ -115,5 +115,5 @@ def revice_data_service(host, port, db_session=None, client=None):
 
 if "__main__" == __name__:
     client = SendToServer(url="http://localhost:5000/receive_data_from_uav")
-    engine, session = connect_db(url="mysql://aweffr:summer123@aweffr.win:3306/chat", refresh=True)
+    # engine, session = connect_db(url="mysql://aweffr:summer123@aweffr.win:3306/chat", refresh=True)
     revice_data_service(host="0.0.0.0", port=5050, client=client)
