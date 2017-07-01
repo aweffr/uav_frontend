@@ -71,6 +71,8 @@ def revice_data_service(host, port, db_session=None, client=None):
             conn.settimeout(5)
             szBuf = conn.recv(1024)
 
+            print("#DEBUG: szBuf=", szBuf)
+
             s = szBuf.decode("utf-8")
             s = list(map(float, s.split()))
 
