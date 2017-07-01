@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 from random import randint
 import json
 import time
-import datetime
+from datetime import datetime, timedelta
 from collections import deque
 from flask_sqlalchemy import SQLAlchemy
 
@@ -24,19 +24,31 @@ class FlaskInfo(db.Model):
     jing_du = db.Column(db.Float)
     wei_du = db.Column(db.Float)
     height = db.Column(db.Float)
-    chou_yang = db.Column(db.Float)
     pm25 = db.Column(db.Float)
+    chou_yang = db.Column(db.Float)
     wen_du = db.Column(db.Float)
     shi_du = db.Column(db.Float)
+    recv_time = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     def __repr__(self):
-        return "<FlaskInfo id=%d jing_du=%f wei_du=%f height=%f" % (self.id, self.jing_du, self.wei_du, self.height)
+        return "<FlaskInfo> pm25=%f" % self.pm25
 
 
-xx = [(datetime.datetime.now() + datetime.timedelta(seconds=(x - 60))).strftime("%H:%M:%S") for x in range(60)]
-yy = [0, ]
-for i in range(59):
-    yy.append(yy[-1] + 0.5 * randint(0, 0))
+xx = [(datetime.now() + timedelta(seconds=(x - 60))).strftime("%H:%M:%S") for x in range(60)]
+yy = deque()
+
+
+def init():
+    global xx, yy
+    xx = [(datetime.now() + timedelta(seconds=(x - 60))).strftime("%H:%M:%S") for x in range(60)]
+    yy = deque(maxlen=(len(xx)))
+    data_list = FlaskInfo.query.order_by(FlaskInfo.id.asc()).all()
+    for info in data_list:
+        yy.append((info.jing_du, info.wei_du, info.height, info.pm25, info.chou_yang, info.wen_du, info.shi_du))
+    while len(yy) < len(xx):
+        yy.appendleft((0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
+
+    print(yy)
 
 
 @app.route('/')
@@ -49,6 +61,25 @@ def receive_data_from_uav():
     data = request.data
     data = json.loads(data)
     print("receive_data_from_uav", data)
+
+    info = FlaskInfo(data["jing_du"],
+                     data["wei_du"],
+                     data["height"],
+                     data["pm25"],
+                     data["chou_yang"],
+                     data["wen_du"],
+                     data["shi_du"])
+    db.session.add(info)
+
+    xx.append(datetime.now().strftime("%H:%M:%S"))
+    yy.append((data["jing_du"],
+               data["wei_du"],
+               data["height"],
+               data["pm25"],
+               data["chou_yang"],
+               data["wen_du"],
+               data["shi_du"]))
+
     return "Succeed", 200
 
 
@@ -67,27 +98,48 @@ def pages(page_name):
     return render_template('/pages/%s' % page_name)
 
 
-@app.route('/getdata')
-def getdata():
+@app.route('/get_ozone_data')
+def get_ozone_data():
     global xx, yy
+    out = []
+    for info in yy:
+        out.append(info[4])
     d = {'xx': xx,
-         'yy': yy}
+         'yy': out}
     return json.dumps(d)
 
 
-@app.route('/updatedata')
+@app.route('/update_ozone_data')
 def update_data():
     global xx, yy
-    xx.append(time.strftime("%H:%M:%S"))
-    yy.append(yy[-1] + 0.66 * randint(0, 0))
-    d = {'x': xx[-1], 'y': yy[-1]}
+    out = yy[-1][4]
+    d = {'x': xx[-1], 'y': out}
+    return json.dumps(d)
+
+
+@app.route('/get_pm25_data')
+def get_pm25_data():
+    global xx, yy
+    out = []
+    for info in yy:
+        out.append(info[3])
+    d = {'xx': xx,
+         'yy': out}
+    return json.dumps(d)
+
+
+@app.route('/update_pm25_data')
+def update_pm25_data():
+    global xx, yy
+    out = yy[-1][3]
+    d = {'x': xx[-1], 'y': out}
     return json.dumps(d)
 
 
 @app.route('/get-ozone-history-data')
 def get_ozone_history_data():
     # Test stage
-    ozone_xx = [time.strftime(datetime.datetime(2017, 5, i).strftime("%Y-%m-%d")) for i in range(6, 14)]
+    ozone_xx = [time.strftime(datetime(2017, 5, i).strftime("%Y-%m-%d")) for i in range(6, 14)]
     # ozone_yy = [52 + 8 * (random() - 0.5) for i in range(len(ozone_xx))]
     ozone_yy = [54.13354220083586,
                 54.40904295827208,
@@ -109,7 +161,7 @@ def get_ozone_history_data():
 @app.route('/get-pm25-history-data')
 def get_pm25_history_data():
     # Test stage
-    pm25_xx = [time.strftime(datetime.datetime(2017, 5, i).strftime("%Y-%m-%d")) for i in range(6, 14)]
+    pm25_xx = [time.strftime(datetime(2017, 5, i).strftime("%Y-%m-%d")) for i in range(6, 14)]
     pm25_yy = [72.31210130392026,
                74.36003202003266,
                81.0815528593375,
@@ -127,4 +179,5 @@ def get_pm25_history_data():
 
 
 if __name__ == '__main__':
+    init()
     app.run(host="0.0.0.0", port=5000)

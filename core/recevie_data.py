@@ -1,7 +1,7 @@
 import socket
 import struct
 from datetime import datetime
-from sqlalchemy import Column, String, create_engine, Integer, Float
+from sqlalchemy import Column, String, create_engine, Integer, Float, DateTime
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import json
@@ -18,10 +18,11 @@ class Info(Base):
     jing_du = Column(Float)
     wei_du = Column(Float)
     height = Column(Float)
-    chou_yang = Column(Float)
     pm25 = Column(Float)
+    chou_yang = Column(Float)
     wen_du = Column(Float)
     shi_du = Column(Float)
+    recv_time = Column(DateTime)
 
     def __repr__(self):
         return "<Info jing_du=%f wei_du=%f height=%f" % (self.jing_du, self.wei_du, self.height)
@@ -79,13 +80,19 @@ def revice_data_service(host, port, db_session=None, client=None):
             print("Service succeed at %s" % time_string)
             print("unpacked:", s)
 
-            jing_du = s[2]
-            wei_du = s[3]
-            chou_yang = s[5]
+            jing_du = s[0]
+            wei_du = s[1]
+            height = s[2]
+            pm25 = s[3]
+            chou_yang = s[4]
+            wen_du = s[5]
+            shi_du = s[6]
 
             if db_session is not None:
                 try:
-                    info = Info(jing_du=jing_du, wei_du=wei_du, height=0.0, chou_yang=chou_yang)
+                    info = Info(jing_du=jing_du, wei_du=wei_du,
+                                height=height, pm25=pm25,
+                                chou_yang=chou_yang, wen_du=wen_du, shi_du=shi_du)
                     print(info)
                     db_session.add(info)
                     db_session.commit()
@@ -93,7 +100,8 @@ def revice_data_service(host, port, db_session=None, client=None):
                     print("database insert error", e)
 
             if client is not None:
-                message = {"jing_du": jing_du, "wei_du": wei_du, "height": 0.0, "chou_yang": chou_yang}
+                message = {"jing_du": jing_du, "wei_du": wei_du, "height": height, "pm25": pm25,
+                           "chou_yang": chou_yang, "wen_du": wen_du, "shi_du": shi_du}
                 client.send(message)
 
             conn.close()
@@ -107,4 +115,5 @@ def revice_data_service(host, port, db_session=None, client=None):
 
 if "__main__" == __name__:
     client = SendToServer(url="http://localhost:5000/receive_data_from_uav")
+    engine, session = connect_db(url="mysql://aweffr:summer123@aweffr.win:3306/chat", refresh=True)
     revice_data_service(host="0.0.0.0", port=5050, client=client)

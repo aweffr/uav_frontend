@@ -63,13 +63,13 @@ function update_chart() {
 
 $(document).ready(function () {
     $.ajax({
-        url: "/getdata",
+        url: "/get_ozone_data",
         dataType: "json",
         success: plot
     });
     setInterval(function () {
         $.ajax({
-            url: "/updatedata",
+            url: "/update_ozone_data",
             dataType: "json",
             success: update_data
         })
