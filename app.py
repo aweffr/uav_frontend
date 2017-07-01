@@ -60,15 +60,19 @@ def index():
 def receive_data_from_uav():
     data = request.data
     data = json.loads(data)
-    print("receive_data_from_uav", data)
+    print("receive_data_from_uav", type(data), data)
+    
+    if isinstance(data, str):
+        data = eval(data)
+        print(repr(data))
 
-    info = FlaskInfo(data["jing_du"],
-                     data["wei_du"],
-                     data["height"],
-                     data["pm25"],
-                     data["chou_yang"],
-                     data["wen_du"],
-                     data["shi_du"])
+    info = FlaskInfo(jing_du=data["jing_du"],
+                     wei_du=data["wei_du"],
+                     height=data["height"],
+                     pm25=data["pm25"],
+                     chou_yang=data["chou_yang"],
+                     wen_du=data["wen_du"],
+                     shi_du=data["shi_du"])
     db.session.add(info)
 
     xx.append(datetime.now().strftime("%H:%M:%S"))
