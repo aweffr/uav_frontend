@@ -1,11 +1,37 @@
-from flask import Flask, render_template
-from random import shuffle, randint
-from json import dumps
-from random import random
+from flask import Flask, render_template, request
+from random import randint
+import json
 import time
 import datetime
+from collections import deque
+from flask_sqlalchemy import SQLAlchemy
+
+data_queue = deque(maxlen=100)
+thread = None
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://aweffr:summer123@aweffr.win:3306/chat"
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
+db = SQLAlchemy(app)
+
+
+class FlaskInfo(db.Model):
+    __tablename__ = "info"
+    id = db.Column(db.Integer, primary_key=True)
+    jing_du = db.Column(db.Float)
+    wei_du = db.Column(db.Float)
+    height = db.Column(db.Float)
+    chou_yang = db.Column(db.Float)
+    pm25 = db.Column(db.Float)
+    wen_du = db.Column(db.Float)
+    shi_du = db.Column(db.Float)
+
+    def __repr__(self):
+        return "<FlaskInfo id=%d jing_du=%f wei_du=%f height=%f" % (self.id, self.jing_du, self.wei_du, self.height)
+
 
 xx = [(datetime.datetime.now() + datetime.timedelta(seconds=(x - 60))).strftime("%H:%M:%S") for x in range(60)]
 yy = [0, ]
@@ -16,6 +42,14 @@ for i in range(59):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route("/receive_data_from_uav", methods=["POST"])
+def receive_data_from_uav():
+    data = request.data
+    data = json.loads(data)
+    print("receive_data_from_uav", data)
+    return "Succeed", 200
 
 
 @app.route('/testindex')
@@ -38,7 +72,7 @@ def getdata():
     global xx, yy
     d = {'xx': xx,
          'yy': yy}
-    return dumps(d)
+    return json.dumps(d)
 
 
 @app.route('/updatedata')
@@ -47,7 +81,7 @@ def update_data():
     xx.append(time.strftime("%H:%M:%S"))
     yy.append(yy[-1] + 0.66 * randint(0, 0))
     d = {'x': xx[-1], 'y': yy[-1]}
-    return dumps(d)
+    return json.dumps(d)
 
 
 @app.route('/get-ozone-history-data')
@@ -69,7 +103,7 @@ def get_ozone_history_data():
         "yy": ozone_yy
     }
     print(d)
-    return dumps(d)
+    return json.dumps(d)
 
 
 @app.route('/get-pm25-history-data')
@@ -89,9 +123,8 @@ def get_pm25_history_data():
         "xx": pm25_xx,
         "yy": pm25_yy
     }
-    return dumps(d)
+    return json.dumps(d)
 
 
 if __name__ == '__main__':
-    # proc = psutil.Popen(["python", "D:/NetworkProgramming/dynamic_chart/core/recevie_data.py"], stdin=PIPE, stdout=PIPE)
-    app.run(host="0.0.0.0", port=12000)
+    app.run(host="0.0.0.0", port=5000)

@@ -16,7 +16,7 @@ $(document).ready(function () {
         pm25Option = {
             title: {
                 text: 'PM2.5 近日浓度变化',
-                left: 'left',
+                left: 'left'
             },
             legend: {
                 data: ['PM2.5']
@@ -27,9 +27,6 @@ $(document).ready(function () {
                 boundaryGap: ['5%', '5%']
             },
             yAxis: {},
-            tooltip: {
-                trigger: 'axis'
-            },
             series: [{
                 name: 'PM2.5',
                 type: 'line',
@@ -48,7 +45,7 @@ $(document).ready(function () {
         url: "/get-pm25-history-data",
         dataType: "json",
         success: plot
-    })
+    });
 
     var ozoneHistoryChart = null;
     var ozoneXx = [];
@@ -75,9 +72,6 @@ $(document).ready(function () {
                 boundaryGap: ['5%', '5%']
             },
             yAxis: {},
-            tooltip: {
-                trigger: 'axis'
-            },
             series: [{
                 name: '臭氧',
                 type: 'line',
