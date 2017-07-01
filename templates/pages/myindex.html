@@ -51,7 +51,7 @@
 {% block scripts %}
     {{ super() }}
     <!-- Echarts JavaScripts -->
-    <script src="/static/vendor/echarts/echarts.js"></script>
+    <script src="/static/vendor/echarts/echarts.min.js"></script>
     <script src="/static/vendor/echarts/bmap.min.js"></script>
     <script src="/static/data/pm25_and_ozone_history_data.js"></script>
     <script>
@@ -131,7 +131,7 @@
                         blurSize: 2
                     }]
                 });
-                var bmap = myChart.getModel().getComponent('bmap').getBMap();
+{#                var bmap = myChart.getModel().getComponent('bmap').getBMap();#}
 {#                bmap.addControl(new BMap.MapTypeControl());#}
             })
         });
