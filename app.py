@@ -110,11 +110,13 @@ def pages(page_name):
 @app.route('/get_ozone_data')
 def get_ozone_data():
     global xx, yy
-    out = []
-    for info in yy:
-        out.append(info[4])
-    d = {'xx': xx,
-         'yy': out}
+    out_xx = []
+    out_yy = []
+    for x, y in zip(xx, yy):
+        out_xx.append(x)
+        out_yy.append(y[4])
+    d = {'xx': out_xx,
+         'yy': out_yy}
     return json.dumps(d)
 
 
@@ -129,11 +131,13 @@ def update_data():
 @app.route('/get_pm25_data')
 def get_pm25_data():
     global xx, yy
-    out = []
-    for info in yy:
-        out.append(info[3])
-    d = {'xx': xx,
-         'yy': out}
+    out_xx = []
+    out_yy = []
+    for x, y in zip(xx, yy):
+        out_xx.append(x)
+        out_yy.append(y[3])
+    d = {'xx': out_xx,
+         'yy': out_yy}
     return json.dumps(d)
 
 
