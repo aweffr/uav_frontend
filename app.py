@@ -35,12 +35,14 @@ class FlaskInfo(db.Model):
 
 
 xx = [(datetime.now() + timedelta(seconds=(x - 60))).strftime("%H:%M:%S") for x in range(60)]
+xx = deque(xx, maxlen=len(xx))
 yy = deque()
 
 
 def init():
     global xx, yy
     xx = [(datetime.now() + timedelta(seconds=(x - 60))).strftime("%H:%M:%S") for x in range(60)]
+    xx = deque(xx, maxlen=len(xx))
     yy = deque(maxlen=(len(xx)))
     data_list = FlaskInfo.query.order_by(FlaskInfo.id.asc()).all()
     for info in data_list:
