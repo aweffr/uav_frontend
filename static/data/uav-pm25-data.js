@@ -54,7 +54,8 @@ function plot(data) {
             data: ['PM2.5']
         },
         xAxis: {
-            data: yy_height
+            min: 0,
+            type: "value"
         },
         yAxis: {},
         tooltip: {

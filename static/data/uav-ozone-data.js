@@ -53,7 +53,8 @@ function plot(data) {
             data: ['臭氧']
         },
         xAxis: {
-            data: yy_height
+            min: 0,
+            type: "value"
         },
         yAxis: {},
         tooltip: {
