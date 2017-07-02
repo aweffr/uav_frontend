@@ -53,7 +53,7 @@ function plot(data) {
             data: ['臭氧']
         },
         xAxis: {
-            data: xx_height
+            data: yy_height
         },
         yAxis: {},
         tooltip: {
@@ -62,7 +62,7 @@ function plot(data) {
         series: [{
             name: '臭氧',
             type: 'line',
-            data: yy_height,
+            data: xx_height,
             smooth: false
         }]
     };
@@ -98,12 +98,12 @@ function update_chart() {
 
     heightChart.setOption({
         xAxis: {
-            data: xx_height
+            data: yy_height
         },
         series: [{
             name: '臭氧',
             type: 'line',
-            data: yy_height
+            data: xx_height
         }]
     })
 }

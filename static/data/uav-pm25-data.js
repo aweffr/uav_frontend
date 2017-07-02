@@ -54,7 +54,7 @@ function plot(data) {
             data: ['PM2.5']
         },
         xAxis: {
-            data: xx_height
+            data: yy_height
         },
         yAxis: {},
         tooltip: {
@@ -63,7 +63,7 @@ function plot(data) {
         series: [{
             name: 'PM2.5',
             type: 'line',
-            data: yy_height,
+            data: xx_height,
             smooth: false
         }]
     };
@@ -95,12 +95,12 @@ function update_chart() {
     });
     heightChart.setOption({
         xAxis: {
-            data: xx_height
+            data: yy_height
         },
         series: [{
             name: 'PM2.5',
             type: 'line',
-            data: yy_height
+            data: xx_height
         }]
     });
 }
