@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request
-from random import randint
 import json
 import time
 from datetime import datetime, timedelta
 from collections import deque
 from flask_sqlalchemy import SQLAlchemy
+from operator import itemgetter
 
 data_queue = deque(maxlen=100)
 thread = None
@@ -61,7 +61,7 @@ def receive_data_from_uav():
     data = request.data
     data = json.loads(data)
     print("receive_data_from_uav", type(data), data)
-    
+
     if isinstance(data, str):
         data = eval(data)
         print(repr(data))
@@ -140,11 +140,28 @@ def update_pm25_data():
     return json.dumps(d)
 
 
+# (info.jing_du, info.wei_du, info.height, info.pm25, info.chou_yang, info.wen_du, info.shi_du)
+@app.route("/get-ozone-height")
+def get_ozone_height():
+    global xx, yy
+    lst = []
+    for data in yy:
+        if data is not None:
+            lst.append((data[2], data[3], data[4]))  # (height, chou_yang)
+    lst = sorted(lst, key=itemgetter(0, 1))
+    x_out, y_out = [], []
+    for height, pm25, chou_yang in lst:
+        x_out.append(height)
+        y_out.append(chou_yang)
+    d = {'xx': x_out,
+         'yy': y_out}
+    return json.dumps(d)
+
+
 @app.route('/get-ozone-history-data')
 def get_ozone_history_data():
     # Test stage
     ozone_xx = [time.strftime(datetime(2017, 5, i).strftime("%Y-%m-%d")) for i in range(6, 14)]
-    # ozone_yy = [52 + 8 * (random() - 0.5) for i in range(len(ozone_xx))]
     ozone_yy = [54.13354220083586,
                 54.40904295827208,
                 52.837885234874825,
@@ -170,9 +187,9 @@ def get_pm25_history_data():
                74.36003202003266,
                81.0815528593375,
                85.44115429140395,
-               80.97432689427235,
-               77.09845096931669,
-               69.45107713653275,
+               83.97432689427235,
+               79.09845096931669,
+               73.45107713653275,
                65.97297080702435]
 
     d = {
