@@ -74,16 +74,19 @@ def receive_data_from_uav():
                      wen_du=data["wen_du"],
                      shi_du=data["shi_du"])
     db.session.add(info)
-
-    xx.append(datetime.now().strftime("%H:%M:%S"))
-    yy.append((data["jing_du"],
-               data["wei_du"],
-               data["height"],
-               data["pm25"],
-               data["chou_yang"],
-               data["wen_du"],
-               data["shi_du"]))
-
+    x_now = datetime.now().strftime("%H:%M:%S")
+    y_now = (data["jing_du"],
+             data["wei_du"],
+             data["height"],
+             data["pm25"],
+             data["chou_yang"],
+             data["wen_du"],
+             data["shi_du"])
+    if len(xx) == 0 or (len(xx) > 0 and x_now != xx[-1]):
+        xx.append(datetime.now().strftime("%H:%M:%S"))
+        yy.append(y_now)
+    else:
+        yy[-1] = y_now
     return "Succeed", 200
 
 
