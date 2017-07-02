@@ -125,12 +125,15 @@ def get_ozone_data():
 
 #  0             1            2             3         4               5            6
 # (info.jing_du, info.wei_du, info.height, info.pm25, info.chou_yang, info.wen_du, info.shi_du)
-def get_heigth_data():
+def get_heigth_data(option):
     global xx, yy
     lst = []
     for data in yy:
         lst.append((data[2], data[3], data[4]))  # (height, pm25, chou_yang)
-    # lst = sorted(lst, key=itemgetter(0, 1, 2))
+    if option == "pm25":
+        lst = sorted(lst, key=itemgetter(1, 0))
+    else:
+        lst = sorted(lst, key=itemgetter(2, 0))
     height_out, pm25_out, chou_yang_out = [], [], []
     for height, pm25, chou_yang in lst:
         height_out.append(height)
