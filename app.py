@@ -117,7 +117,7 @@ def get_ozone_data():
         out_yy.append(y[4])
     d = {'xx': out_xx,
          'yy': out_yy}
-    height_yy, _, chou_yang_xx = get_heigth_data()
+    height_yy, _, chou_yang_xx = get_heigth_data("ozone")
     d["xx_height"] = chou_yang_xx
     d["yy_height"] = height_yy
     return json.dumps(d)
@@ -148,7 +148,7 @@ def update_data():
     out = yy[-1][4]
     d = {'x': xx[-1], 'y': out}
 
-    height_yy, _, chou_yang_xx = get_heigth_data()
+    height_yy, _, chou_yang_xx = get_heigth_data("ozone")
     d["xx_height"] = chou_yang_xx
     d["yy_height"] = height_yy
 
@@ -166,7 +166,7 @@ def get_pm25_data():
     d = {'xx': out_xx,
          'yy': out_yy}
 
-    height_yy, pm25_xx, chou_yang_xx = get_heigth_data()
+    height_yy, pm25_xx, chou_yang_xx = get_heigth_data("pm25")
     d["xx_height"] = pm25_xx
     d["yy_height"] = height_yy
 
@@ -179,7 +179,7 @@ def update_pm25_data():
     out = yy[-1][3]
     d = {'x': xx[-1], 'y': out}
 
-    height_yy, pm25_xx, chou_yang_xx = get_heigth_data()
+    height_yy, pm25_xx, chou_yang_xx = get_heigth_data("pm25")
     d["xx_height"] = pm25_xx
     d["yy_height"] = height_yy
 
