@@ -130,13 +130,15 @@ def get_heigth_data(option):
     lst = []
     for data in yy:
         lst.append((data[2], data[3], data[4]))  # (height, pm25, chou_yang)
-    if option == "pm25":
-        lst = sorted(lst, key=itemgetter(0, 1))
-    else:
-        lst = sorted(lst, key=itemgetter(0, 2))
+    # if option == "pm25":
+    #     lst = sorted(lst, key=itemgetter(0, 1))
+    # else:
+    #     lst = sorted(lst, key=itemgetter(0, 2))
+    lst = sorted(lst, key=itemgetter(0))
     height_out, pm25_out, chou_yang_out = [], [], []
     for height, pm25, chou_yang in lst:
         if len(height_out) > 0 and abs(height_out[-1] - height) < 0.05:
+            height_out[-1] = max(height_out[-1], height)
             continue
         height_out.append(height)
         pm25_out.append(pm25)

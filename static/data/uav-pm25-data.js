@@ -64,7 +64,7 @@ function plot(data) {
             name: 'PM2.5',
             type: 'line',
             data: xx_height,
-            smooth: false
+            smooth: true
         }]
     };
 
