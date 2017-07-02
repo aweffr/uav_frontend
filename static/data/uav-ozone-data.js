@@ -2,13 +2,20 @@
  * Created by ZouLe on 2017/5/5.
  */
 var myChart = null;
+var heightChart = null;
 var xx = [];
 var yy = [];
+var xx_height = [];
+var yy_height = [];
 var option = null;
+var option_height = null;
+
 
 function plot(data) {
     xx = data['xx'];
     yy = data['yy'];
+    xx_height = data["xx_height"];
+    yy_height = data["yy_height"];
 
     // $("#debug").text(" " + ozoneXx + " " + ozoneYy);
 
@@ -37,8 +44,34 @@ function plot(data) {
 
     myChart = echarts.init(document.getElementById('uav-line-chart'));
 
+    option_height = {
+        title: {
+            text: '高度——臭氧',
+            left: 'left'
+        },
+        legend: {
+            data: ['臭氧']
+        },
+        xAxis: {
+            data: xx_height
+        },
+        yAxis: {},
+        tooltip: {
+            trigger: 'axis'
+        },
+        series: [{
+            name: '臭氧',
+            type: 'line',
+            data: yy_height,
+            smooth: false
+        }]
+    };
+
+    heightChart = echarts.init(document.getElementById("uav-height-chart"));
+
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
+    heightChart.setOption(option_height);
 }
 
 function update_data(data) {
@@ -46,6 +79,9 @@ function update_data(data) {
     xx.shift();
     yy.push(data['y']);
     yy.shift();
+
+    xx_height = data['xx_height'];
+    yy_height = data['yy_height'];
 }
 
 function update_chart() {
@@ -57,6 +93,17 @@ function update_chart() {
             name: '臭氧',
             type: 'line',
             data: yy
+        }]
+    });
+
+    heightChart.setOption({
+        xAxis: {
+            data: xx_height
+        },
+        series: [{
+            name: '臭氧',
+            type: 'line',
+            data: yy_height
         }]
     })
 }

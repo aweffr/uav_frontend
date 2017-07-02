@@ -117,7 +117,26 @@ def get_ozone_data():
         out_yy.append(y[4])
     d = {'xx': out_xx,
          'yy': out_yy}
+    height_yy, _, chou_yang_xx = get_heigth_data()
+    d["xx_height"] = chou_yang_xx
+    d["yy_height"] = height_yy
     return json.dumps(d)
+
+
+#  0             1            2             3         4               5            6
+# (info.jing_du, info.wei_du, info.height, info.pm25, info.chou_yang, info.wen_du, info.shi_du)
+def get_heigth_data():
+    global xx, yy
+    lst = []
+    for data in yy:
+        lst.append((data[2], data[3], data[4]))  # (height, pm25, chou_yang)
+    lst = sorted(lst, key=itemgetter(0, 1, 2))
+    height_out, pm25_out, chou_yang_out = [], [], []
+    for height, pm25, chou_yang in lst:
+        height_out.append(height)
+        pm25_out.append(pm25)
+        chou_yang_out.append(chou_yang)
+    return height_out, pm25_out, chou_yang_out
 
 
 @app.route('/update_ozone_data')
@@ -125,6 +144,11 @@ def update_data():
     global xx, yy
     out = yy[-1][4]
     d = {'x': xx[-1], 'y': out}
+
+    height_yy, _, chou_yang_xx = get_heigth_data()
+    d["xx_height"] = chou_yang_xx
+    d["yy_height"] = height_yy
+
     return json.dumps(d)
 
 
@@ -138,6 +162,11 @@ def get_pm25_data():
         out_yy.append(y[3])
     d = {'xx': out_xx,
          'yy': out_yy}
+
+    height_yy, pm25_xx, chou_yang_xx = get_heigth_data()
+    d["xx_height"] = pm25_xx
+    d["yy_height"] = height_yy
+
     return json.dumps(d)
 
 
@@ -146,24 +175,11 @@ def update_pm25_data():
     global xx, yy
     out = yy[-1][3]
     d = {'x': xx[-1], 'y': out}
-    return json.dumps(d)
 
+    height_yy, pm25_xx, chou_yang_xx = get_heigth_data()
+    d["xx_height"] = pm25_xx
+    d["yy_height"] = height_yy
 
-# (info.jing_du, info.wei_du, info.height, info.pm25, info.chou_yang, info.wen_du, info.shi_du)
-@app.route("/get-ozone-height")
-def get_ozone_height():
-    global xx, yy
-    lst = []
-    for data in yy:
-        if data is not None:
-            lst.append((data[2], data[3], data[4]))  # (height, chou_yang)
-    lst = sorted(lst, key=itemgetter(0, 1))
-    x_out, y_out = [], []
-    for height, pm25, chou_yang in lst:
-        x_out.append(height)
-        y_out.append(chou_yang)
-    d = {'xx': x_out,
-         'yy': y_out}
     return json.dumps(d)
 
 
