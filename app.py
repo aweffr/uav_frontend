@@ -136,6 +136,8 @@ def get_heigth_data(option):
         lst = sorted(lst, key=itemgetter(0, 2))
     height_out, pm25_out, chou_yang_out = [], [], []
     for height, pm25, chou_yang in lst:
+        if len(height_out) > 0 and abs(height_out[-1] - height) < 0.05:
+            continue
         height_out.append(height)
         pm25_out.append(pm25)
         chou_yang_out.append(chou_yang)
