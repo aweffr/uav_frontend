@@ -7,11 +7,8 @@ from sqlalchemy.ext.declarative import declarative_base
 import json
 import requests
 
-# 创建对象的基类
 Base = declarative_base()
 
-
-# 定义飞机回传数据对象
 class Info(Base):
     __tablename__ = "info"
     id = Column(Integer, primary_key=True)
@@ -70,7 +67,7 @@ def revice_data_service(host, port, db_session=None, client=None):
             print("get client", conn, addr)
 
             conn.settimeout(5)
-            szBuf = conn.recv(1024)
+            szBuf = conn.recv(128)
 
             print("#DEBUG: szBuf=", szBuf)
 
