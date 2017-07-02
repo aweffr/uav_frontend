@@ -130,7 +130,7 @@ def get_heigth_data():
     lst = []
     for data in yy:
         lst.append((data[2], data[3], data[4]))  # (height, pm25, chou_yang)
-    lst = sorted(lst, key=itemgetter(0, 1, 2))
+    # lst = sorted(lst, key=itemgetter(0, 1, 2))
     height_out, pm25_out, chou_yang_out = [], [], []
     for height, pm25, chou_yang in lst:
         height_out.append(height)
