@@ -52,7 +52,7 @@ def revice_data_service(host, port, db_session=None, client=None):
         sock.bind((host, port))
         print("bind socket succeed!")
 
-        sock.listen(30)
+        sock.listen(5)
         print("listen succeed!")
 
     except Exception as e:
@@ -67,7 +67,7 @@ def revice_data_service(host, port, db_session=None, client=None):
             print("get client", conn, addr)
 
             conn.settimeout(120)
-            szBuf = conn.recv(128)
+            szBuf = conn.recv(1024)
 
             print("#DEBUG: szBuf=", szBuf)
 
